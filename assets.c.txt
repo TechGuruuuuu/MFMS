@@ -1,0 +1,230 @@
+#include <stdio.h>
+#include <string.h>
+#include "assets.h"
+
+/* Asset data */
+int assetID[MAX];
+char assetName[MAX][NAME_LEN];
+char assetType[MAX][TYPE_LEN];
+float purchaseValue[MAX];
+char assetDepartment[MAX][DEPT_LEN];
+char assetCondition[MAX][COND_LEN];
+int assetCount = 0;
+
+/* Check if asset ID already exists */
+int assetIDExists(int id)
+{
+    int i;
+
+    for (i = 0; i < assetCount; i++)
+    {
+        if (assetID[i] == id)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/* Add asset */
+void addAsset(void)
+{
+    int id;
+
+    if (assetCount >= MAX)
+    {
+        printf("\nAsset storage is full.\n");
+        return;
+    }
+
+    printf("\n===== ADD ASSET =====\n");
+
+    while (1)
+    {
+        id = readInt("Enter Asset ID: ", 1, 999999);
+
+        if (assetIDExists(id))
+        {
+            printf("Asset ID already exists. Please use another ID.\n");
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    assetID[assetCount] = id;
+
+    readString(
+        "Enter Asset Name: ",
+        assetName[assetCount],
+        NAME_LEN
+    );
+
+    readString(
+        "Enter Asset Type: ",
+        assetType[assetCount],
+        TYPE_LEN
+    );
+
+    purchaseValue[assetCount] =
+        readFloat("Enter Purchase Value (N$): ");
+
+    readString(
+        "Enter Department: ",
+        assetDepartment[assetCount],
+        DEPT_LEN
+    );
+
+    readString(
+        "Enter Asset Condition: ",
+        assetCondition[assetCount],
+        COND_LEN
+    );
+
+    assetCount++;
+
+    printf("\nAsset added successfully!\n");
+}
+
+/* Display assets */
+void displayAssets(void)
+{
+    int i;
+
+    printf("\n===== ASSET LIST =====\n");
+
+    if (assetCount == 0)
+    {
+        printf("No assets have been added yet.\n");
+        return;
+    }
+
+    for (i = 0; i < assetCount; i++)
+    {
+        printf("\nAsset %d\n", i + 1);
+        printf("ID: %d\n", assetID[i]);
+        printf("Name: %s\n", assetName[i]);
+        printf("Type: %s\n", assetType[i]);
+        printf("Purchase Value: N$ %.2f\n",
+               purchaseValue[i]);
+        printf("Department: %s\n",
+               assetDepartment[i]);
+        printf("Condition: %s\n",
+               assetCondition[i]);
+    }
+}
+
+/* Search asset */
+void searchAsset(void)
+{
+    int choice;
+    int id;
+    int i;
+    int found = 0;
+    char name[NAME_LEN];
+
+    if (assetCount == 0)
+    {
+        printf("\nNo assets have been added yet.\n");
+        return;
+    }
+
+    printf("\n===== SEARCH ASSET =====\n");
+    printf("1. Search by Asset ID\n");
+    printf("2. Search by Asset Name\n");
+
+    choice = readInt("Choose an option: ", 1, 2);
+
+    if (choice == 1)
+    {
+        id = readInt("Enter Asset ID: ", 1, 999999);
+
+        for (i = 0; i < assetCount; i++)
+        {
+            if (assetID[i] == id)
+            {
+                printf("\nAsset found!\n");
+                printf("ID: %d\n", assetID[i]);
+                printf("Name: %s\n", assetName[i]);
+                printf("Type: %s\n", assetType[i]);
+                printf("Purchase Value: N$ %.2f\n",
+                       purchaseValue[i]);
+                printf("Department: %s\n",
+                       assetDepartment[i]);
+                printf("Condition: %s\n",
+                       assetCondition[i]);
+
+                found = 1;
+                break;
+            }
+        }
+    }
+    else
+    {
+        readString("Enter Asset Name: ", name, NAME_LEN);
+
+        for (i = 0; i < assetCount; i++)
+        {
+            if (strcmp(assetName[i], name) == 0)
+            {
+                printf("\nAsset found!\n");
+                printf("ID: %d\n", assetID[i]);
+                printf("Name: %s\n", assetName[i]);
+                printf("Type: %s\n", assetType[i]);
+                printf("Purchase Value: N$ %.2f\n",
+                       purchaseValue[i]);
+                printf("Department: %s\n",
+                       assetDepartment[i]);
+                printf("Condition: %s\n",
+                       assetCondition[i]);
+
+                found = 1;
+                break;
+            }
+        }
+    }
+
+    if (!found)
+    {
+        printf("\nAsset not found.\n");
+    }
+}
+
+/* Asset menu */
+void assetMenu(void)
+{
+    int choice;
+
+    do
+    {
+        printf("\n===== ASSET MANAGEMENT =====\n");
+        printf("1. Add Asset\n");
+        printf("2. Display Assets\n");
+        printf("3. Search Asset\n");
+        printf("4. Back to Main Menu\n");
+
+        choice = readInt("Choose an option: ", 1, 4);
+
+        switch (choice)
+        {
+            case 1:
+                addAsset();
+                break;
+
+            case 2:
+                displayAssets();
+                break;
+
+            case 3:
+                searchAsset();
+                break;
+
+            case 4:
+                printf("Returning to main menu...\n");
+                break;
+        }
+
+    } while (choice != 4);
+}

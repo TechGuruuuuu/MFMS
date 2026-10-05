@@ -1,0 +1,218 @@
+#include <stdio.h>
+#include <string.h>
+#include "suppliers.h"
+
+/* Supplier data */
+int supplierID[MAX];
+char supplierName[MAX][NAME_LEN];
+char supplierEmail[MAX][EMAIL_LEN];
+char supplierTelephone[MAX][TEL_LEN];
+char supplierTown[MAX][NAME_LEN];
+int supplierCount = 0;
+
+/* Check if supplier ID already exists */
+int supplierIDExists(int id)
+{
+    int i;
+
+    for (i = 0; i < supplierCount; i++)
+    {
+        if (supplierID[i] == id)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/* Add supplier */
+void addSupplier(void)
+{
+    int id;
+
+    if (supplierCount >= MAX)
+    {
+        printf("\nSupplier storage is full.\n");
+        return;
+    }
+
+    printf("\n===== ADD SUPPLIER =====\n");
+
+    while (1)
+    {
+        id = readInt("Enter Supplier ID: ", 1, 999999);
+
+        if (supplierIDExists(id))
+        {
+            printf("Supplier ID already exists. Please use another ID.\n");
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    supplierID[supplierCount] = id;
+
+    readString(
+        "Enter Supplier Name: ",
+        supplierName[supplierCount],
+        NAME_LEN
+    );
+
+    readString(
+        "Enter Supplier Email: ",
+        supplierEmail[supplierCount],
+        EMAIL_LEN
+    );
+
+    readString(
+        "Enter Supplier Telephone: ",
+        supplierTelephone[supplierCount],
+        TEL_LEN
+    );
+
+    readString(
+        "Enter Supplier Town/Location: ",
+        supplierTown[supplierCount],
+        NAME_LEN
+    );
+
+    supplierCount++;
+
+    printf("\nSupplier added successfully!\n");
+}
+
+/* Display suppliers */
+void displaySuppliers(void)
+{
+    int i;
+
+    printf("\n===== SUPPLIER LIST =====\n");
+
+    if (supplierCount == 0)
+    {
+        printf("No suppliers have been added yet.\n");
+        return;
+    }
+
+    for (i = 0; i < supplierCount; i++)
+    {
+        printf("\nSupplier %d\n", i + 1);
+        printf("ID: %d\n", supplierID[i]);
+        printf("Name: %s\n", supplierName[i]);
+        printf("Email: %s\n", supplierEmail[i]);
+        printf("Telephone: %s\n", supplierTelephone[i]);
+        printf("Town/Location: %s\n", supplierTown[i]);
+    }
+}
+
+/* Search supplier */
+void searchSupplier(void)
+{
+    int choice;
+    int id;
+    int i;
+    int found = 0;
+    char name[NAME_LEN];
+
+    if (supplierCount == 0)
+    {
+        printf("\nNo suppliers have been added yet.\n");
+        return;
+    }
+
+    printf("\n===== SEARCH SUPPLIER =====\n");
+    printf("1. Search by Supplier ID\n");
+    printf("2. Search by Supplier Name\n");
+
+    choice = readInt("Choose an option: ", 1, 2);
+
+    if (choice == 1)
+    {
+        id = readInt("Enter Supplier ID: ", 1, 999999);
+
+        for (i = 0; i < supplierCount; i++)
+        {
+            if (supplierID[i] == id)
+            {
+                printf("\nSupplier found!\n");
+                printf("ID: %d\n", supplierID[i]);
+                printf("Name: %s\n", supplierName[i]);
+                printf("Email: %s\n", supplierEmail[i]);
+                printf("Telephone: %s\n",
+                       supplierTelephone[i]);
+                printf("Town/Location: %s\n",
+                       supplierTown[i]);
+
+                found = 1;
+                break;
+            }
+        }
+    }
+    else
+    {
+        readString("Enter Supplier Name: ", name, NAME_LEN);
+
+        for (i = 0; i < supplierCount; i++)
+        {
+            if (strcmp(supplierName[i], name) == 0)
+            {
+                printf("\nSupplier found!\n");
+                printf("ID: %d\n", supplierID[i]);
+                printf("Name: %s\n", supplierName[i]);
+                printf("Email: %s\n", supplierEmail[i]);
+                printf("Telephone: %s\n",
+                       supplierTelephone[i]);
+                printf("Town/Location: %s\n",
+                       supplierTown[i]);
+
+                found = 1;
+                break;
+            }
+        }
+    }
+
+    if (!found)
+    {
+        printf("\nSupplier not found.\n");
+    }
+}
+
+/* Supplier menu */
+void supplierMenu(void)
+{
+    int choice;
+
+    do
+    {
+        printf("\n===== SUPPLIER MANAGEMENT =====\n");
+        printf("1. Add Supplier\n");
+        printf("2. Display Suppliers\n");
+        printf("3. Search Supplier\n");
+        printf("4. Back to Main Menu\n");
+
+        choice = readInt("Choose an option: ", 1, 4);
+
+        switch (choice)
+        {
+            case 1:
+                addSupplier();
+                break;
+
+            case 2:
+                displaySuppliers();
+                break;
+
+            case 3:
+                searchSupplier();
+                break;
+
+            case 4:
+                printf("Returning to main menu...\n");
+                break;
+        }
+
+    } while (choice != 4);
+}

@@ -1,0 +1,21 @@
+#ifndef ASSETS_H
+#define ASSETS_H
+
+#include "common.h"
+
+/* Asset data */
+extern int assetID[MAX];
+extern char assetName[MAX][NAME_LEN];
+extern char assetType[MAX][TYPE_LEN];
+extern float purchaseValue[MAX];
+extern char assetDepartment[MAX][DEPT_LEN];
+extern char assetCondition[MAX][COND_LEN];
+extern int assetCount;
+
+/* Asset functions */
+void addAsset(void);
+void displayAssets(void);
+void searchAsset(void);
+void assetMenu(void);
+
+#endif

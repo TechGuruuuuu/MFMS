@@ -1,0 +1,20 @@
+#ifndef SUPPLIERS_H
+#define SUPPLIERS_H
+
+#include "common.h"
+
+/* Supplier data */
+extern int supplierID[MAX];
+extern char supplierName[MAX][NAME_LEN];
+extern char supplierEmail[MAX][EMAIL_LEN];
+extern char supplierTelephone[MAX][TEL_LEN];
+extern char supplierTown[MAX][NAME_LEN];
+extern int supplierCount;
+
+/* Supplier functions */
+void addSupplier(void);
+void displaySuppliers(void);
+void searchSupplier(void);
+void supplierMenu(void);
+
+#endif
